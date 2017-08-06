@@ -1,30 +1,33 @@
 #!/usr/bin/env python2.7
 
+head = lambda xs: xs[0]
+tail = lambda xs: xs[1:]
+
 def map1(f, xs):
     if not xs:
         return []
     else:
-        return [f(xs[0])] + map1(f, xs[1:])
+        return [f(head(xs))] + map1(f, tail(xs))
 
 def filter1(p, xs):
     if not xs:
         return []
-    elif p(xs[0]):
-        return [xs[0]] + filter1(p, xs[1:])
+    elif p(head(xs)):
+        return [head(xs)] + filter1(p, tail(xs))
     else:
-        return filter1(p, xs[1:])
+        return filter1(p, tail(xs))
 
 def reduce1(f, a, xs):
     if not xs:
         return a
     else:
-        return reduce1(f, f(a, xs[0]), xs[1:])
+        return reduce1(f, f(a, head(xs)), tail(xs))
 
 def foldr(f, a, xs):
     if not xs:
         return a
     else:
-        return f(xs[0], foldr(f, a, xs[1:]))
+        return f(head(xs), foldr(f, a, tail(xs)))
 
 def map2(f, xs):
     return foldr(lambda x, a: [f(x)]+a, [], xs)
