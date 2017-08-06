@@ -17,17 +17,19 @@ def filter1(p, xs):
     else:
         return filter1(p, tail(xs))
 
-def reduce1(f, a, xs):
+def foldl(f, a, xs):
     if not xs:
         return a
     else:
-        return reduce1(f, f(a, head(xs)), tail(xs))
+        return foldl(f, f(a, head(xs)), tail(xs))
 
 def foldr(f, a, xs):
     if not xs:
         return a
     else:
         return f(head(xs), foldr(f, a, tail(xs)))
+
+reduce1 = foldl
 
 def map2(f, xs):
     return foldr(lambda x, a: [f(x)]+a, [], xs)
