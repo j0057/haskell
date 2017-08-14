@@ -1,5 +1,5 @@
 #!/usr/bin/env runhaskell
-module Main (main) where
+module RWH03 (add, fac, fib, main) where
 
 import Test.HUnit
 
@@ -14,6 +14,7 @@ fib 0 = 1
 fib 1 = 1
 fib n = fib (n-1) + fib (n-2)
 
+main :: IO Counts
 main = do
     runTestTT $ test [
         "add tests" ~: test [ 5 ~=? (add 2 3),
