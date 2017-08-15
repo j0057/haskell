@@ -17,8 +17,7 @@ last' (x:xs) | null xs   = x
 secondLast :: [a] -> a
 secondLast (x1:x2:xs) | null xs   = x1
                       | otherwise = secondLast (x2:xs)
-secondLast (x:[]) = error "secondLast: list too short"
-secondLast []     = error "secondLast: empty list"
+secondLast _ = error "secondLast: list too short"
 
 main :: IO Counts
 main = do
