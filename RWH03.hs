@@ -64,6 +64,11 @@ direction (x1, y1) (x2, y2) (x3, y3) | crossProduct > 0 = CCW
                                      | otherwise        = CL
     where crossProduct = (x2-x1) * (y3-y1) - (y2-y1) * (x3-x1)
 
+directions :: [(Int, Int)] -> [Direction]
+directions xs = zipWith3 direction xs ys zs
+    where ys = tail xs
+          zs = tail ys
+
 main :: IO Counts
 main = do
     runTestTT $ test [ "fromList"       ~: [ (Cons 1 (Cons 2 Nil)) ~=? (fromList [1, 2]) ]
@@ -96,5 +101,7 @@ main = do
                      , "direction"      ~: [ CCW ~=? (direction (0, 0) (1, 1) (0, 1))
                                            , CL  ~=? (direction (0, 0) (1, 1) (2, 2))
                                            , CW  ~=? (direction (0, 0) (1, 1) (1, 0))
+                                           ]
+                     , "directions"     ~: [ [CCW, CL, CW] ~=? (directions [(0,0), (1,1), (1,2), (1,3), (2,4)])
                                            ]
                      ]
