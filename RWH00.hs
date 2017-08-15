@@ -1,5 +1,5 @@
 #!/usr/bin/env runhaskell
-module RWH03 (add, fac, fib, main) where
+module RWH00 (add, fac, fib, main) where
 
 import Test.HUnit
 
