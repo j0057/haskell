@@ -18,6 +18,9 @@ data Tree a = Node a (Tree a) (Tree a)
 data MTree a = MNode a (Maybe (MTree a)) (Maybe (MTree a))
     deriving (Show, Eq)
 
+data Direction = CCW | CL | CW
+    deriving (Eq, Show)
+
 fromList :: [a] -> List a
 fromList (x:xs) = Cons x $ fromList xs
 fromList []     = Nil
@@ -55,6 +58,12 @@ treeDepth :: Tree a -> Int
 treeDepth Empty = 0
 treeDepth (Node _ left right) = 1 + (max (treeDepth left) (treeDepth right))
 
+direction :: (Int, Int) -> (Int, Int) -> (Int, Int) -> Direction
+direction (x1, y1) (x2, y2) (x3, y3) | crossProduct > 0 = CCW
+                                     | crossProduct < 0 = CW
+                                     | otherwise        = CL
+    where crossProduct = (x2-x1) * (y3-y1) - (y2-y1) * (x3-x1)
+
 main :: IO Counts
 main = do
     runTestTT $ test [ "fromList"       ~: [ (Cons 1 (Cons 2 Nil)) ~=? (fromList [1, 2]) ]
@@ -83,5 +92,9 @@ main = do
                      , "treeDepth"      ~: [ 0 ~=? (treeDepth Empty)
                                            , 1 ~=? (treeDepth (Node 1 Empty Empty))
                                            , 2 ~=? (treeDepth (Node 2 (Node 1 Empty Empty) Empty))
+                                           ]
+                     , "direction"      ~: [ CCW ~=? (direction (0, 0) (1, 1) (0, 1))
+                                           , CL  ~=? (direction (0, 0) (1, 1) (2, 2))
+                                           , CW  ~=? (direction (0, 0) (1, 1) (1, 0))
                                            ]
                      ]
